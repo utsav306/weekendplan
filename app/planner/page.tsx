@@ -20,6 +20,36 @@ const tabs = [
 ];
 
 export default function PlannerPage() {
+  // Dummy activities for quick add
+  const dummyActivities: Omit<Activity, "id" | "completed" | "day">[] = [
+    {
+      title: "Go for a walk",
+      time: "08:00",
+      category: "fitness",
+      mood: "energetic",
+    },
+    {
+      title: "Brunch with friends",
+      time: "11:00",
+      category: "food",
+      mood: "happy",
+    },
+    { title: "Read a book", time: "15:00", category: "relax", mood: "calm" },
+    { title: "Movie night", time: "20:00", category: "fun", mood: "happy" },
+    { title: "Yoga session", time: "07:00", category: "fitness", mood: "calm" },
+    { title: "Board games", time: "17:00", category: "social", mood: "happy" },
+  ];
+
+  const handleQuickAdd = (
+    activity: Omit<Activity, "id" | "completed" | "day">,
+  ) => {
+    addActivity({
+      ...activity,
+      id: Date.now().toString() + Math.random().toString(36).slice(2),
+      completed: false,
+      day: activeDay as "saturday" | "sunday",
+    });
+  };
   const [activeDay, setActiveDay] = useState("saturday");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
@@ -106,6 +136,7 @@ export default function PlannerPage() {
         </div>
 
         {/* Day Tabs */}
+
         <Tabs tabs={tabs} activeTab={activeDay} onTabChange={setActiveDay} />
 
         {/* Content Area */}
@@ -166,19 +197,39 @@ export default function PlannerPage() {
           </div>
         </div>
 
-        {/* Mobile navigation hint */}
-        <div className="lg:hidden">
-          <motion.div
-            className="text-center mt-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <p className="text-amber-600 text-sm">
-              Switch between days using the tabs above
-            </p>
-          </motion.div>
+        {/* Quick Add Dummy Activities - moved below timelines */}
+        <div className="mb-8 max-w-2xl mx-auto px-4">
+          <h3 className="text-lg font-semibold text-amber-900 mb-2 text-center">
+            Quick Add Activities
+          </h3>
+          <div className="flex flex-wrap gap-3 justify-center">
+            {dummyActivities.map((act, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleQuickAdd(act)}
+                className="px-4 py-2 rounded-lg border border-amber-300 bg-white/80 hover:bg-amber-100 shadow text-sm flex items-center gap-2 transition min-w-[140px]"
+              >
+                <span className="text-xl">
+                  {require("@/lib/types").categoryConfig[act.category].icon}
+                </span>
+                {act.title}{" "}
+                <span className="text-xs text-gray-500">({act.time})</span>
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* Mobile Tab Hint */}
+        <motion.div
+          className="lg:hidden text-center mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <p className="text-amber-600 text-sm">
+            Switch between days using the tabs above
+          </p>
+        </motion.div>
 
         {/* Activity Modal */}
         <ActivityModal
