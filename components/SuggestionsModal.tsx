@@ -1,0 +1,204 @@
+'use client';
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Sparkles } from 'lucide-react';
+import { SuggestionMood, ActivitySuggestion, WeatherData, categoryConfig } from '@/lib/types';
+import { useActivitySuggestions } from '@/hooks/useActivitySuggestions';
+import Button from './Button';
+
+interface SuggestionsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddActivity: (suggestion: ActivitySuggestion, day: 'saturday' | 'sunday') => void;
+  weather?: WeatherData | null;
+}
+
+const moodOptions = [
+  { id: 'lazy', label: 'Lazy', emoji: '😴', description: 'Low-key, relaxing activities' },
+  { id: 'adventurous', label: 'Adventurous', emoji: '🗺️', description: 'Exciting, active experiences' },
+  { id: 'social', label: 'Social', emoji: '👥', description: 'Fun activities with others' },
+  { id: 'chill', label: 'Chill', emoji: '🧘', description: 'Peaceful, mindful moments' }
+];
+
+export default function SuggestionsModal({ isOpen, onClose, onAddActivity, weather }: SuggestionsModalProps) {
+  const [selectedMood, setSelectedMood] = useState<SuggestionMood | null>(null);
+  const [suggestions, setSuggestions] = useState<ActivitySuggestion[]>([]);
+  const [selectedDay, setSelectedDay] = useState<'saturday' | 'sunday'>('saturday');
+  const { getSuggestions } = useActivitySuggestions();
+
+  const handleMoodSelect = (mood: SuggestionMood) => {
+    setSelectedMood(mood);
+    const newSuggestions = getSuggestions(mood, weather);
+    setSuggestions(newSuggestions);
+  };
+
+  const handleAddActivity = (suggestion: ActivitySuggestion) => {
+    onAddActivity(suggestion, selectedDay);
+  };
+
+  const handleClose = () => {
+    setSelectedMood(null);
+    setSuggestions([]);
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleClose}
+          />
+
+          {/* Modal */}
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", bounce: 0.3 }}
+          >
+            <div className="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                  <h2 className="text-2xl font-bold text-amber-900">AI Activity Suggestions</h2>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Weather Context */}
+              {weather && (
+                <div className="bg-amber-50 rounded-lg p-4 mb-6">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-2xl">{weather.icon}</span>
+                    <div>
+                      <p className="font-semibold text-amber-900">
+                        {weather.temperature}°C in {weather.city}
+                      </p>
+                      <p className="text-sm text-amber-700">{weather.description}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {!selectedMood ? (
+                /* Mood Selection */
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                    What's your weekend mood?
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {moodOptions.map((mood) => (
+                      <motion.button
+                        key={mood.id}
+                        onClick={() => handleMoodSelect(mood.id as SuggestionMood)}
+                        className="p-4 rounded-xl border-2 border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all text-left"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="text-3xl">{mood.emoji}</span>
+                          <h4 className="font-bold text-gray-800">{mood.label}</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">{mood.description}</p>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Suggestions Display */
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      Perfect for a {selectedMood} weekend
+                    </h3>
+                    <button
+                      onClick={() => {
+                        setSelectedMood(null);
+                        setSuggestions([]);
+                      }}
+                      className="text-amber-600 hover:text-amber-700 text-sm font-medium"
+                    >
+                      ← Change mood
+                    </button>
+                  </div>
+
+                  {/* Day Selection */}
+                  <div className="flex space-x-2 mb-6">
+                    <button
+                      onClick={() => setSelectedDay('saturday')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        selectedDay === 'saturday'
+                          ? 'bg-amber-500 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Saturday 🎯
+                    </button>
+                    <button
+                      onClick={() => setSelectedDay('sunday')}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        selectedDay === 'sunday'
+                          ? 'bg-amber-500 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Sunday 🏁
+                    </button>
+                  </div>
+
+                  {/* Suggestions Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {suggestions.map((suggestion, index) => {
+                      const categoryStyle = categoryConfig[suggestion.category];
+                      return (
+                        <motion.div
+                          key={suggestion.id}
+                          className={`p-4 rounded-xl border-2 ${categoryStyle.color}`}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-2xl">{categoryStyle.icon}</span>
+                              <div>
+                                <h4 className="font-bold">{suggestion.title}</h4>
+                                <p className="text-sm opacity-75">{suggestion.time}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            onClick={() => handleAddActivity(suggestion)}
+                            variant="primary"
+                            size="sm"
+                            className="w-full"
+                          >
+                            Add to {selectedDay === 'saturday' ? 'Saturday' : 'Sunday'}
+                          </Button>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
