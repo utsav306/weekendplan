@@ -1,29 +1,36 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Confetti from 'react-confetti';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import Confetti from "react-confetti";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ConfettiCelebrationProps {
   isActive: boolean;
   onComplete: () => void;
 }
 
-export default function ConfettiCelebration({ isActive, onComplete }: ConfettiCelebrationProps) {
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
+export default function ConfettiCelebration({
+  isActive,
+  onComplete,
+}: ConfettiCelebrationProps) {
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     const updateDimensions = () => {
       setWindowDimensions({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       });
     };
 
     updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
   useEffect(() => {
@@ -47,9 +54,9 @@ export default function ConfettiCelebration({ isActive, onComplete }: ConfettiCe
         recycle={false}
         numberOfPieces={200}
         gravity={0.3}
-        colors={['#F59E0B', '#D97706', '#92400E', '#FED7AA', '#FEF3C7']}
+        colors={["#F59E0B", "#D97706", "#92400E", "#FED7AA", "#FEF3C7"]}
       />
-      
+
       <AnimatePresence>
         {showMessage && (
           <motion.div
@@ -59,7 +66,19 @@ export default function ConfettiCelebration({ isActive, onComplete }: ConfettiCe
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ type: "spring", bounce: 0.5 }}
           >
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-2xl text-center">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-2xl text-center relative">
+              {/* Close button */}
+              <button
+                onClick={() => {
+                  setShowMessage(false);
+                  onComplete();
+                }}
+                className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-200 focus:outline-none z-10"
+                style={{ pointerEvents: "auto" }}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
               <motion.div
                 initial={{ rotate: 0 }}
                 animate={{ rotate: [0, -10, 10, -10, 0] }}

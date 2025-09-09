@@ -1,25 +1,37 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import { Activity, ActivityCategory, ActivityMood, categoryConfig, moodConfig } from '@/lib/types';
-import Button from './Button';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import {
+  Activity,
+  ActivityCategory,
+  ActivityMood,
+  categoryConfig,
+  moodConfig,
+} from "@/lib/types";
+import Button from "./Button";
 
 interface ActivityModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (activity: Activity) => void;
   activity?: Activity | null;
-  day: 'saturday' | 'sunday';
+  day: "saturday" | "sunday";
 }
 
-export default function ActivityModal({ isOpen, onClose, onSave, activity, day }: ActivityModalProps) {
+export default function ActivityModal({
+  isOpen,
+  onClose,
+  onSave,
+  activity,
+  day,
+}: ActivityModalProps) {
   const [formData, setFormData] = useState({
-    title: '',
-    time: '',
-    category: 'fun' as ActivityCategory,
-    mood: 'happy' as ActivityMood
+    title: "",
+    time: "",
+    category: "fun" as ActivityCategory,
+    mood: "happy" as ActivityMood,
   });
 
   useEffect(() => {
@@ -28,14 +40,14 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
         title: activity.title,
         time: activity.time,
         category: activity.category,
-        mood: activity.mood
+        mood: activity.mood,
       });
     } else {
       setFormData({
-        title: '',
-        time: '',
-        category: 'fun',
-        mood: 'happy'
+        title: "",
+        time: "",
+        category: "fun",
+        mood: "happy",
       });
     }
   }, [activity, isOpen]);
@@ -51,7 +63,7 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
       category: formData.category,
       mood: formData.mood,
       completed: activity?.completed || false,
-      day
+      day,
     };
 
     onSave(newActivity);
@@ -64,7 +76,7 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 bg-black/50 z-40 pointer-events-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -73,17 +85,17 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
 
           {/* Modal */}
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: "spring", bounce: 0.3 }}
           >
-            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl pointer-events-auto">
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-amber-900">
-                  {activity ? 'Edit Activity' : 'Add Activity'}
+                  {activity ? "Edit Activity" : "Add Activity"}
                 </h2>
                 <button
                   onClick={onClose}
@@ -103,7 +115,9 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
                   <input
                     type="text"
                     value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder="What are you planning to do?"
                     required
@@ -118,7 +132,9 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
                   <input
                     type="time"
                     value={formData.time}
-                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, time: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     required
                   />
@@ -134,15 +150,23 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
                       <button
                         key={key}
                         type="button"
-                        onClick={() => setFormData({ ...formData, category: key as ActivityCategory })}
-                        className={`p-3 rounded-lg border-2 transition-all ${
-                          formData.category === key
-                            ? config.color
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            category: key as ActivityCategory,
+                          })
+                        }
+                        className={`p-3 rounded-lg border-2 transition-all focus:outline-none
+                          ${
+                            formData.category === key
+                              ? `${config.color} ring-2 ring-amber-400 bg-opacity-80 border-amber-500`
+                              : "border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-amber-300"
+                          }`}
                       >
                         <div className="text-2xl mb-1">{config.icon}</div>
-                        <div className="text-xs font-medium">{config.label}</div>
+                        <div className="text-xs font-medium">
+                          {config.label}
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -158,11 +182,16 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
                       <button
                         key={key}
                         type="button"
-                        onClick={() => setFormData({ ...formData, mood: key as ActivityMood })}
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            mood: key as ActivityMood,
+                          })
+                        }
                         className={`p-3 rounded-lg border-2 transition-all ${
                           formData.mood === key
-                            ? 'border-amber-400 bg-amber-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? "border-amber-400 bg-amber-50"
+                            : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
                         <span className="text-2xl">{emoji}</span>
@@ -181,12 +210,8 @@ export default function ActivityModal({ isOpen, onClose, onSave, activity, day }
                   >
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    className="flex-1"
-                  >
-                    {activity ? 'Update' : 'Add'} Activity
+                  <Button type="submit" variant="primary" className="flex-1">
+                    {activity ? "Update" : "Add"} Activity
                   </Button>
                 </div>
               </form>

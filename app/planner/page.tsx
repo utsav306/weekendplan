@@ -25,6 +25,7 @@ export default function PlannerPage() {
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [hasCelebrated, setHasCelebrated] = useState(false);
   const {
     plan,
     addActivity,
@@ -35,21 +36,22 @@ export default function PlannerPage() {
   } = useWeekendPlan();
   const { weather } = useWeather();
 
-  // Check for 100% completion
+  // Check for 100% completion, but only celebrate once per completion
   useEffect(() => {
     const totalActivities = plan.saturday.length + plan.sunday.length;
     const completedActivities =
       plan.saturday.filter((a) => a.completed).length +
       plan.sunday.filter((a) => a.completed).length;
 
-    if (
-      totalActivities > 0 &&
-      completedActivities === totalActivities &&
-      !showConfetti
-    ) {
-      setShowConfetti(true);
+    if (totalActivities > 0 && completedActivities === totalActivities) {
+      if (!hasCelebrated) {
+        setShowConfetti(true);
+        setHasCelebrated(true);
+      }
+    } else {
+      setHasCelebrated(false);
     }
-  }, [plan, showConfetti]);
+  }, [plan, hasCelebrated]);
 
   const handleAddActivity = () => {
     setEditingActivity(null);
@@ -77,12 +79,12 @@ export default function PlannerPage() {
     setIsSuggestionsOpen(false);
   };
 
-  const handleDeleteActivity = (id: string) => {
-    deleteActivity(id, activeDay as "saturday" | "sunday");
+  const handleDeleteActivity = (id: string, day: 'saturday' | 'sunday') => {
+    deleteActivity(id, day);
   };
 
-  const handleCompleteActivity = (id: string) => {
-    toggleComplete(id, activeDay as "saturday" | "sunday");
+  const handleCompleteActivity = (id: string, day: 'saturday' | 'sunday') => {
+    toggleComplete(id, day);
   };
 
   const handleSuggestActivities = () => {
@@ -127,8 +129,8 @@ export default function PlannerPage() {
                   }}
                   onSuggestActivities={handleSuggestActivities}
                   onEditActivity={handleEditActivity}
-                  onDeleteActivity={handleDeleteActivity}
-                  onCompleteActivity={handleCompleteActivity}
+                  onDeleteActivity={(id) => handleDeleteActivity(id, 'saturday')}
+                  onCompleteActivity={(id) => handleCompleteActivity(id, 'saturday')}
                 />
               </div>
             </motion.div>
@@ -150,8 +152,8 @@ export default function PlannerPage() {
                   }}
                   onSuggestActivities={handleSuggestActivities}
                   onEditActivity={handleEditActivity}
-                  onDeleteActivity={handleDeleteActivity}
-                  onCompleteActivity={handleCompleteActivity}
+                  onDeleteActivity={(id) => handleDeleteActivity(id, 'sunday')}
+                  onCompleteActivity={(id) => handleCompleteActivity(id, 'sunday')}
                 />
               </div>
             </motion.div>
