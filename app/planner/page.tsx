@@ -79,11 +79,11 @@ export default function PlannerPage() {
     setIsSuggestionsOpen(false);
   };
 
-  const handleDeleteActivity = (id: string, day: 'saturday' | 'sunday') => {
+  const handleDeleteActivity = (id: string, day: "saturday" | "sunday") => {
     deleteActivity(id, day);
   };
 
-  const handleCompleteActivity = (id: string, day: 'saturday' | 'sunday') => {
+  const handleCompleteActivity = (id: string, day: "saturday" | "sunday") => {
     toggleComplete(id, day);
   };
 
@@ -129,8 +129,12 @@ export default function PlannerPage() {
                   }}
                   onSuggestActivities={handleSuggestActivities}
                   onEditActivity={handleEditActivity}
-                  onDeleteActivity={(id) => handleDeleteActivity(id, 'saturday')}
-                  onCompleteActivity={(id) => handleCompleteActivity(id, 'saturday')}
+                  onDeleteActivity={(id) =>
+                    handleDeleteActivity(id, "saturday")
+                  }
+                  onCompleteActivity={(id) =>
+                    handleCompleteActivity(id, "saturday")
+                  }
                 />
               </div>
             </motion.div>
@@ -152,8 +156,10 @@ export default function PlannerPage() {
                   }}
                   onSuggestActivities={handleSuggestActivities}
                   onEditActivity={handleEditActivity}
-                  onDeleteActivity={(id) => handleDeleteActivity(id, 'sunday')}
-                  onCompleteActivity={(id) => handleCompleteActivity(id, 'sunday')}
+                  onDeleteActivity={(id) => handleDeleteActivity(id, "sunday")}
+                  onCompleteActivity={(id) =>
+                    handleCompleteActivity(id, "sunday")
+                  }
                 />
               </div>
             </motion.div>
