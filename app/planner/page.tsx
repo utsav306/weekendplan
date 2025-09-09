@@ -138,16 +138,16 @@ export default function PlannerPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-25 to-orange-100">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 md:py-12">
         {/* Header */}
-        <Header title="My Weekend Journey" className="mb-12" />
+        <Header title="My Weekend Journey" className="mb-8 md:mb-12" />
 
         {/* Weather Widget */}
-        <div className="px-20">
-          <WeatherWidget className="mb-8" />
+        <div className="px-4 sm:px-8 md:px-12 lg:px-20">
+          <WeatherWidget className="mb-6 md:mb-8" />
 
           {/* Progress Bar */}
-          <ProgressBar plan={plan} className="mb-8" />
+          <ProgressBar plan={plan} className="mb-6 md:mb-8" />
         </div>
 
         {/* Day Tabs */}
@@ -213,17 +213,17 @@ export default function PlannerPage() {
         </div>
 
         {/* Quick Add Activities */}
-        <div className="my-12 max-w-4xl mx-auto px-4">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
-            <h3 className="text-xl font-semibold text-amber-900 mb-4 flex items-center">
-              <span className="mr-2">⚡</span>
+        <div className="my-8 sm:my-10 md:my-12 max-w-4xl mx-auto px-2 sm:px-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg border border-amber-200">
+            <h3 className="text-lg sm:text-xl font-semibold text-amber-900 mb-3 sm:mb-4 flex flex-wrap items-center gap-1 sm:gap-0">
+              <span className="mr-1 sm:mr-2">⚡</span>
               Quick Add Activities
-              <span className="ml-auto text-sm font-normal text-amber-600">
+              <span className="ml-auto text-xs sm:text-sm font-normal text-amber-600 whitespace-nowrap">
                 Click to add
               </span>
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
               {dummyActivities.map((act, idx) => {
                 const categoryDetails = categoryConfig[act.category];
                 return (
@@ -232,17 +232,23 @@ export default function PlannerPage() {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleQuickAdd(act)}
-                    className={`p-3 rounded-lg border border-amber-200 bg-white hover:${categoryDetails.color} hover:shadow-md shadow-sm text-left flex items-center gap-3 transition`}
+                    className={`p-2 sm:p-3 rounded-lg border border-amber-200 bg-white hover:${categoryDetails.color} hover:shadow-md shadow-sm text-left flex items-center gap-2 sm:gap-3 transition`}
                   >
                     <div
-                      className={`p-2 rounded-full ${categoryDetails.color} text-xl flex-shrink-0`}
+                      className={`p-1.5 sm:p-2 rounded-full ${categoryDetails.color} text-lg sm:text-xl flex-shrink-0`}
                     >
                       {categoryDetails.icon}
                     </div>
-                    <div>
-                      <div className="font-medium">{act.title}</div>
-                      <div className="text-xs text-gray-500">
-                        {act.time} • {categoryDetails.label}
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium text-sm sm:text-base truncate">
+                        {act.title}
+                      </div>
+                      <div className="text-xs text-gray-500 flex items-center gap-1">
+                        <span className="whitespace-nowrap">{act.time}</span>
+                        <span className="hidden xs:inline-block">•</span>
+                        <span className="whitespace-nowrap">
+                          {categoryDetails.label}
+                        </span>
                       </div>
                     </div>
                   </motion.button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { ActivitySuggestion, SuggestionMood, WeatherData } from '@/lib/types';
+import { ActivitySuggestion, SuggestionMood, WeatherData, ActivityCategory, ActivityMood } from '@/lib/types';
 
 const suggestionDatabase = {
   lazy: {
@@ -93,7 +93,9 @@ export function useActivitySuggestions() {
     return suggestions.slice(0, 4).map((suggestion, index) => ({
       ...suggestion,
       id: `suggestion-${Date.now()}-${index}`,
-      weatherDependent: true
+      weatherDependent: true,
+      category: suggestion.category as ActivityCategory,
+      mood: suggestion.mood as ActivityMood
     }));
   };
 
