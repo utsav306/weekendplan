@@ -10,9 +10,10 @@ import WeatherWidget from "@/components/WeatherWidget";
 import ProgressBar from "@/components/ProgressBar";
 import SuggestionsModal from "@/components/SuggestionsModal";
 import ConfettiCelebration from "@/components/ConfettiCelebration";
+import DaySelectionDialog from "@/components/DaySelectionDialog";
 import { useWeekendPlan } from "@/hooks/useWeekendPlan";
 import { useWeather } from "@/hooks/useWeather";
-import { Activity, ActivitySuggestion } from "@/lib/types";
+import { Activity, ActivitySuggestion, categoryConfig } from "@/lib/types";
 
 const tabs = [
   { id: "saturday", label: "Saturday", emoji: "🎯" },
@@ -43,16 +44,30 @@ export default function PlannerPage() {
   const handleQuickAdd = (
     activity: Omit<Activity, "id" | "completed" | "day">,
   ) => {
+    setSelectedQuickActivity(activity);
+    setIsDaySelectionOpen(true);
+  };
+
+  const handleAddQuickActivityToDay = (
+    activity: Omit<Activity, "id" | "completed" | "day">,
+    day: "saturday" | "sunday",
+  ) => {
     addActivity({
       ...activity,
       id: Date.now().toString() + Math.random().toString(36).slice(2),
       completed: false,
-      day: activeDay as "saturday" | "sunday",
+      day,
     });
+    setIsDaySelectionOpen(false);
   };
   const [activeDay, setActiveDay] = useState("saturday");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [isDaySelectionOpen, setIsDaySelectionOpen] = useState(false);
+  const [selectedQuickActivity, setSelectedQuickActivity] = useState<Omit<
+    Activity,
+    "id" | "completed" | "day"
+  > | null>(null);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [hasCelebrated, setHasCelebrated] = useState(false);
@@ -197,25 +212,43 @@ export default function PlannerPage() {
           </div>
         </div>
 
-        {/* Quick Add Dummy Activities - moved below timelines */}
-        <div className="mb-8 max-w-2xl mx-auto px-4">
-          <h3 className="text-lg font-semibold text-amber-900 mb-2 text-center">
-            Quick Add Activities
-          </h3>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {dummyActivities.map((act, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleQuickAdd(act)}
-                className="px-4 py-2 rounded-lg border border-amber-300 bg-white/80 hover:bg-amber-100 shadow text-sm flex items-center gap-2 transition min-w-[140px]"
-              >
-                <span className="text-xl">
-                  {require("@/lib/types").categoryConfig[act.category].icon}
-                </span>
-                {act.title}{" "}
-                <span className="text-xs text-gray-500">({act.time})</span>
-              </button>
-            ))}
+        {/* Quick Add Activities */}
+        <div className="my-12 max-w-4xl mx-auto px-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
+            <h3 className="text-xl font-semibold text-amber-900 mb-4 flex items-center">
+              <span className="mr-2">⚡</span>
+              Quick Add Activities
+              <span className="ml-auto text-sm font-normal text-amber-600">
+                Click to add
+              </span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {dummyActivities.map((act, idx) => {
+                const categoryDetails = categoryConfig[act.category];
+                return (
+                  <motion.button
+                    key={idx}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleQuickAdd(act)}
+                    className={`p-3 rounded-lg border border-amber-200 bg-white hover:${categoryDetails.color} hover:shadow-md shadow-sm text-left flex items-center gap-3 transition`}
+                  >
+                    <div
+                      className={`p-2 rounded-full ${categoryDetails.color} text-xl flex-shrink-0`}
+                    >
+                      {categoryDetails.icon}
+                    </div>
+                    <div>
+                      <div className="font-medium">{act.title}</div>
+                      <div className="text-xs text-gray-500">
+                        {act.time} • {categoryDetails.label}
+                      </div>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -253,6 +286,19 @@ export default function PlannerPage() {
           isActive={showConfetti}
           onComplete={() => setShowConfetti(false)}
         />
+
+        {/* Day Selection Dialog */}
+        {selectedQuickActivity && (
+          <DaySelectionDialog
+            isOpen={isDaySelectionOpen}
+            onClose={() => {
+              setIsDaySelectionOpen(false);
+              setSelectedQuickActivity(null);
+            }}
+            activity={selectedQuickActivity}
+            onSelectDay={handleAddQuickActivityToDay}
+          />
+        )}
       </div>
     </div>
   );
