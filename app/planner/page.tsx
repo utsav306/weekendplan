@@ -137,22 +137,112 @@ export default function PlannerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-25 to-orange-100">
-      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 md:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-25 to-orange-100 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating geometric shapes */}
+        <motion.div
+          className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-amber-200/30 to-orange-200/30 rounded-full blur-xl"
+          animate={{
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-r from-rose-200/25 to-pink-200/25 rounded-full blur-lg"
+          animate={{
+            y: [0, 15, 0],
+            x: [0, -15, 0],
+            scale: [1, 0.9, 1],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+        />
+        <motion.div
+          className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-r from-yellow-200/20 to-amber-200/20 rounded-full blur-2xl"
+          animate={{
+            y: [0, -25, 0],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-28 h-28 bg-gradient-to-r from-orange-300/15 to-red-200/15 rounded-full blur-xl"
+          animate={{
+            y: [0, 20, 0],
+            x: [0, -10, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+        />
+
+        {/* Floating particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-amber-400/40 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 4,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 md:py-12 relative z-10">
         {/* Header */}
         <Header title="My Weekend Journey" className="mb-8 md:mb-12" />
 
         {/* Weather Widget */}
-        <div className="px-4 sm:px-8 md:px-12 lg:px-20">
+        <motion.div
+          className="px-4 sm:px-8 md:px-12 lg:px-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <WeatherWidget className="mb-6 md:mb-8" />
 
           {/* Progress Bar */}
           <ProgressBar plan={plan} className="mb-6 md:mb-8" />
-        </div>
+        </motion.div>
 
         {/* Day Tabs */}
-
-        <Tabs tabs={tabs} activeTab={activeDay} onTabChange={setActiveDay} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Tabs tabs={tabs} activeTab={activeDay} onTabChange={setActiveDay} />
+        </motion.div>
 
         {/* Content Area */}
         <div className="max-w-6xl mx-auto">
@@ -165,23 +255,27 @@ export default function PlannerPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200">
-                <DayTimeline
-                  day="saturday"
-                  activities={plan.saturday}
-                  onAddActivity={() => {
-                    setActiveDay("saturday");
-                    handleAddActivity();
-                  }}
-                  onSuggestActivities={handleSuggestActivities}
-                  onEditActivity={handleEditActivity}
-                  onDeleteActivity={(id) =>
-                    handleDeleteActivity(id, "saturday")
-                  }
-                  onCompleteActivity={(id) =>
-                    handleCompleteActivity(id, "saturday")
-                  }
-                />
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                {/* Subtle inner glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
+                <div className="relative z-10">
+                  <DayTimeline
+                    day="saturday"
+                    activities={plan.saturday}
+                    onAddActivity={() => {
+                      setActiveDay("saturday");
+                      handleAddActivity();
+                    }}
+                    onSuggestActivities={handleSuggestActivities}
+                    onEditActivity={handleEditActivity}
+                    onDeleteActivity={(id) =>
+                      handleDeleteActivity(id, "saturday")
+                    }
+                    onCompleteActivity={(id) =>
+                      handleCompleteActivity(id, "saturday")
+                    }
+                  />
+                </div>
               </div>
             </motion.div>
 
@@ -192,54 +286,92 @@ export default function PlannerPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200">
-                <DayTimeline
-                  day="sunday"
-                  activities={plan.sunday}
-                  onAddActivity={() => {
-                    setActiveDay("sunday");
-                    handleAddActivity();
-                  }}
-                  onSuggestActivities={handleSuggestActivities}
-                  onEditActivity={handleEditActivity}
-                  onDeleteActivity={(id) => handleDeleteActivity(id, "sunday")}
-                  onCompleteActivity={(id) =>
-                    handleCompleteActivity(id, "sunday")
-                  }
-                />
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                {/* Subtle inner glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
+                <div className="relative z-10">
+                  <DayTimeline
+                    day="sunday"
+                    activities={plan.sunday}
+                    onAddActivity={() => {
+                      setActiveDay("sunday");
+                      handleAddActivity();
+                    }}
+                    onSuggestActivities={handleSuggestActivities}
+                    onEditActivity={handleEditActivity}
+                    onDeleteActivity={(id) =>
+                      handleDeleteActivity(id, "sunday")
+                    }
+                    onCompleteActivity={(id) =>
+                      handleCompleteActivity(id, "sunday")
+                    }
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
 
         {/* Quick Add Activities */}
-        <div className="my-8 sm:my-10 md:my-12 max-w-4xl mx-auto px-2 sm:px-4">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg border border-amber-200">
-            <h3 className="text-lg sm:text-xl font-semibold text-amber-900 mb-3 sm:mb-4 flex flex-wrap items-center gap-1 sm:gap-0">
-              <span className="mr-1 sm:mr-2">⚡</span>
+        <motion.div
+          className="my-8 sm:my-10 md:my-12 max-w-4xl mx-auto px-2 sm:px-4"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg border border-amber-200 hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+            {/* Animated background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-50/0 via-amber-50/50 to-amber-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            <motion.h3
+              className="text-lg sm:text-xl font-semibold text-amber-900 mb-3 sm:mb-4 flex flex-wrap items-center gap-1 sm:gap-0 relative z-10"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+            >
+              <motion.span
+                className="mr-1 sm:mr-2"
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+              >
+                ⚡
+              </motion.span>
               Quick Add Activities
               <span className="ml-auto text-xs sm:text-sm font-normal text-amber-600 whitespace-nowrap">
                 Click to add
               </span>
-            </h3>
+            </motion.h3>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 relative z-10">
               {dummyActivities.map((act, idx) => {
                 const categoryDetails = categoryConfig[act.category];
                 return (
                   <motion.button
                     key={idx}
-                    whileHover={{ scale: 1.03 }}
+                    whileHover={{
+                      scale: 1.05,
+                      y: -5,
+                      boxShadow:
+                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                    }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleQuickAdd(act)}
-                    className={`p-2 sm:p-3 rounded-lg border border-amber-200 bg-white hover:${categoryDetails.color} hover:shadow-md shadow-sm text-left flex items-center gap-2 sm:gap-3 transition`}
+                    className={`p-2 sm:p-3 rounded-lg border border-amber-200 bg-white hover:${categoryDetails.color} hover:shadow-md shadow-sm text-left flex items-center gap-2 sm:gap-3 transition-all duration-300 group/item relative overflow-hidden`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.9 + idx * 0.1 }}
                   >
-                    <div
-                      className={`p-1.5 sm:p-2 rounded-full ${categoryDetails.color} text-lg sm:text-xl flex-shrink-0`}
+                    {/* Hover glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-300" />
+
+                    <motion.div
+                      className={`p-1.5 sm:p-2 rounded-full ${categoryDetails.color} text-lg sm:text-xl flex-shrink-0 relative z-10`}
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
                     >
                       {categoryDetails.icon}
-                    </div>
-                    <div className="min-w-0 flex-1">
+                    </motion.div>
+                    <div className="min-w-0 flex-1 relative z-10">
                       <div className="font-medium text-sm sm:text-base truncate">
                         {act.title}
                       </div>
@@ -251,12 +383,22 @@ export default function PlannerPage() {
                         </span>
                       </div>
                     </div>
+
+                    {/* Sparkle effect on hover */}
+                    <motion.div
+                      className="absolute top-2 right-2 opacity-0 group-hover/item:opacity-100"
+                      initial={{ scale: 0 }}
+                      whileHover={{ scale: 1, rotate: 180 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="text-yellow-400 text-sm">✨</span>
+                    </motion.div>
                   </motion.button>
                 );
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Mobile Tab Hint */}
         <motion.div
@@ -265,9 +407,27 @@ export default function PlannerPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <p className="text-amber-600 text-sm">
-            Switch between days using the tabs above
-          </p>
+          <motion.div
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-amber-200 shadow-lg"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.span
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              👆
+            </motion.span>
+            <p className="text-amber-600 text-sm font-medium">
+              Switch between days using the tabs above
+            </p>
+            <motion.span
+              animate={{ x: [0, -5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+            >
+              👆
+            </motion.span>
+          </motion.div>
         </motion.div>
 
         {/* Activity Modal */}

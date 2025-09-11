@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Plus, Sparkles } from 'lucide-react';
-import { Activity } from '@/lib/types';
-import ActivityCard from './ActivityCard';
+import { motion } from "framer-motion";
+import { Plus, Sparkles } from "lucide-react";
+import { Activity } from "@/lib/types";
+import ActivityCard from "./ActivityCard";
 
 interface DayTimelineProps {
-  day: 'saturday' | 'sunday';
+  day: "saturday" | "sunday";
   activities: Activity[];
   onAddActivity: () => void;
   onSuggestActivities: () => void;
@@ -15,22 +15,22 @@ interface DayTimelineProps {
   onCompleteActivity: (id: string) => void;
 }
 
-export default function DayTimeline({ 
-  day, 
-  activities, 
-  onAddActivity, 
+export default function DayTimeline({
+  day,
+  activities,
+  onAddActivity,
   onSuggestActivities,
-  onEditActivity, 
-  onDeleteActivity, 
-  onCompleteActivity 
+  onEditActivity,
+  onDeleteActivity,
+  onCompleteActivity,
 }: DayTimelineProps) {
-  const dayLabel = day === 'saturday' ? 'Saturday' : 'Sunday';
-  const dayEmoji = day === 'saturday' ? '🎯' : '🏁';
+  const dayLabel = day === "saturday" ? "Saturday" : "Sunday";
+  const dayEmoji = day === "saturday" ? "🎯" : "🏁";
 
   return (
     <div className="relative">
       {/* Day Header */}
-      <motion.div 
+      <motion.div
         className="text-center mb-6 sm:mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -44,44 +44,83 @@ export default function DayTimeline({
 
       {/* Timeline Container */}
       <div className="relative">
-        {/* Vertical dotted line */}
+        {/* Vertical dotted line with gradient */}
         {activities.length > 0 && (
-          <div className="absolute left-6 top-0 bottom-0 w-0.5 border-l-2 border-dashed border-amber-300"></div>
+          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-300 via-amber-400 to-amber-300 opacity-60"></div>
         )}
 
         {/* Activities */}
         <div className="space-y-6">
           {activities.length === 0 ? (
-            /* Empty State */
-            <motion.div 
-              className="text-center py-10 sm:py-16"
+            /* Enhanced Empty State */
+            <motion.div
+              className="text-center py-10 sm:py-16 relative"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="text-6xl sm:text-8xl mb-3 sm:mb-4">🧭</div>
-              <h3 className="text-lg sm:text-xl font-semibold text-amber-900 mb-2">
+              {/* Animated background circles */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-amber-100/30 rounded-full"
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                <motion.div
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-orange-100/40 rounded-full"
+                  animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.7, 0.4] }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+                />
+              </div>
+
+              <motion.div
+                className="text-6xl sm:text-8xl mb-3 sm:mb-4 relative z-10"
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              >
+                🧭
+              </motion.div>
+              <motion.h3
+                className="text-lg sm:text-xl font-semibold text-amber-900 mb-2 relative z-10"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
                 No activities yet
-              </h3>
-              <p className="text-amber-700 mb-5 sm:mb-6 px-2">
+              </motion.h3>
+              <motion.p
+                className="text-amber-700 mb-5 sm:mb-6 px-2 relative z-10"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
                 Start planning your {dayLabel.toLowerCase()} adventure!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button
+              </motion.p>
+              <motion.div
+                className="flex flex-col sm:flex-row gap-3 justify-center relative z-10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <motion.button
                   onClick={onAddActivity}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-full font-semibold transition-colors shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Plus size={18} />
                   Add First Activity
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={onSuggestActivities}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-semibold transition-colors shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Sparkles size={18} />
                   Get Suggestions
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </motion.div>
           ) : (
             activities.map((activity, index) => (
@@ -92,10 +131,14 @@ export default function DayTimeline({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                {/* Timeline pin */}
-                <div className="relative z-10 w-12 h-12 bg-amber-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                {/* Enhanced Timeline pin */}
+                <motion.div
+                  className="relative z-10 w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <span className="text-lg">📍</span>
-                </div>
+                </motion.div>
 
                 {/* Activity Card */}
                 <div className="flex-1">
@@ -113,26 +156,58 @@ export default function DayTimeline({
 
         {/* Add Activity Button (when activities exist) */}
         {activities.length > 0 && (
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row justify-center gap-3 mt-6 sm:mt-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: activities.length * 0.1 }}
           >
-            <button
+            <motion.button
               onClick={onAddActivity}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-white/70 hover:bg-white border-2 border-dashed border-amber-300 hover:border-amber-400 text-amber-700 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-white/70 to-amber-50/70 hover:from-white hover:to-amber-50 border-2 border-dashed border-amber-300 hover:border-amber-400 text-amber-700 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+              whileHover={{
+                scale: 1.05,
+                boxShadow:
+                  "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              }}
+              whileTap={{ scale: 0.95 }}
             >
-              <Plus size={18} />
+              <motion.div
+                whileHover={{ rotate: 180 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Plus size={18} />
+              </motion.div>
               Add Activity
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={onSuggestActivities}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-purple-100 hover:bg-purple-200 border-2 border-purple-300 hover:border-purple-400 text-purple-700 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 border-2 border-purple-300 hover:border-purple-400 text-purple-700 rounded-full font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 relative overflow-hidden group"
+              whileHover={{
+                scale: 1.05,
+                boxShadow:
+                  "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              }}
+              whileTap={{ scale: 0.95 }}
             >
-              <Sparkles size={18} />
-              Suggest More
-            </button>
+              {/* Sparkle effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Sparkles size={18} />
+              </motion.div>
+              <span className="relative z-10">Suggest More</span>
+              <motion.span
+                className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100"
+                initial={{ scale: 0 }}
+                whileHover={{ scale: 1, rotate: 180 }}
+                transition={{ duration: 0.3 }}
+              >
+                ✨
+              </motion.span>
+            </motion.button>
           </motion.div>
         )}
       </div>
