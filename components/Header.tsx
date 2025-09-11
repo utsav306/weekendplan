@@ -17,7 +17,7 @@ export default function Header({ title, subtitle, className = "" }: HeaderProps)
       transition={{ duration: 0.6 }}
     >
       <motion.h1 
-        className="text-4xl md:text-6xl font-bold text-amber-900 mb-4"
+        className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 mb-4"
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -26,7 +26,7 @@ export default function Header({ title, subtitle, className = "" }: HeaderProps)
       </motion.h1>
       {subtitle && (
         <motion.p 
-          className="text-lg md:text-xl text-amber-800 font-medium"
+          className="text-lg md:text-xl text-gray-700 font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
