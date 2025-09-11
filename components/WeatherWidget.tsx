@@ -1,28 +1,29 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { RefreshCw, MapPin } from 'lucide-react';
-import { useWeather } from '@/hooks/useWeather';
+import { motion } from "framer-motion";
+import { RefreshCw, MapPin, Navigation } from "lucide-react";
+import { useWeather } from "@/hooks/useWeather";
 
 interface WeatherWidgetProps {
-  city?: string;
   className?: string;
 }
 
-export default function WeatherWidget({ city = 'London', className = "" }: WeatherWidgetProps) {
-  const { weather, loading, error, refetch } = useWeather(city);
+export default function WeatherWidget({ className = "" }: WeatherWidgetProps) {
+  const { weather, loading, error, refetch } = useWeather();
 
   if (loading) {
     return (
-      <motion.div 
+      <motion.div
         className={`bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200 ${className}`}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="flex items-center justify-center space-x-2">
-          <RefreshCw className="w-5 h-5 animate-spin text-amber-600" />
-          <span className="text-amber-700">Loading weather...</span>
+          <Navigation className="w-5 h-5 animate-pulse text-amber-600" />
+          <span className="text-amber-700">
+            Getting your location & weather...
+          </span>
         </div>
       </motion.div>
     );
@@ -30,7 +31,7 @@ export default function WeatherWidget({ city = 'London', className = "" }: Weath
 
   if (error || !weather) {
     return (
-      <motion.div 
+      <motion.div
         className={`bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200 ${className}`}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,8 +41,12 @@ export default function WeatherWidget({ city = 'London', className = "" }: Weath
           <div className="flex items-center space-x-2">
             <span className="text-2xl">🌤️</span>
             <div>
-              <p className="font-semibold text-amber-900">Weather unavailable</p>
-              <p className="text-sm text-amber-700">Perfect day for planning!</p>
+              <p className="font-semibold text-amber-900">
+                Weather unavailable
+              </p>
+              <p className="text-sm text-amber-700">
+                Perfect day for planning!
+              </p>
             </div>
           </div>
           <button
@@ -56,7 +61,7 @@ export default function WeatherWidget({ city = 'London', className = "" }: Weath
   }
 
   return (
-    <motion.div 
+    <motion.div
       className={`bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-200 ${className}`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -67,7 +72,9 @@ export default function WeatherWidget({ city = 'London', className = "" }: Weath
           <span className="text-3xl">{weather.icon}</span>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-amber-900">{weather.temperature}°C</span>
+              <span className="text-2xl font-bold text-amber-900">
+                {weather.temperature}°C
+              </span>
               <div className="flex items-center text-sm text-amber-700">
                 <MapPin className="w-3 h-3 mr-1" />
                 {weather.city}
