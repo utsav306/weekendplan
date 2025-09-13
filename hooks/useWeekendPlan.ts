@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useState } from "react";
 import { Activity, WeekendPlan, ActivitySuggestion } from "@/lib/types";
 
 type Action =
@@ -141,6 +141,7 @@ function weekendPlanReducer(state: WeekendPlan, action: Action): WeekendPlan {
 
 export function useWeekendPlan() {
   const [plan, dispatch] = useReducer(weekendPlanReducer, initialState);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -153,12 +154,15 @@ export function useWeekendPlan() {
         console.error("Failed to load saved plan:", error);
       }
     }
+    setIsInitialized(true);
   }, []);
 
-  // Save to localStorage whenever plan changes
+  // Save to localStorage whenever plan changes (but not on initial render)
   useEffect(() => {
-    localStorage.setItem("weekendly-plan", JSON.stringify(plan));
-  }, [plan]);
+    if (isInitialized) {
+      localStorage.setItem("weekendly-plan", JSON.stringify(plan));
+    }
+  }, [plan, isInitialized]);
 
   const addActivity = (activity: Activity) => {
     dispatch({ type: "ADD_ACTIVITY", payload: activity });
