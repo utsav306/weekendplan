@@ -3,6 +3,11 @@
 import { motion } from "framer-motion";
 import { Plus, Sparkles } from "lucide-react";
 import { Activity } from "@/lib/types";
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import ActivityCard from "./ActivityCard";
 
 interface DayTimelineProps {
@@ -24,6 +29,10 @@ export default function DayTimeline({
   onDeleteActivity,
   onCompleteActivity,
 }: DayTimelineProps) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: day,
+  });
+
   const dayLabel = day === "saturday" ? "Saturday" : "Sunday";
   const dayEmoji = day === "saturday" ? "🎯" : "🏁";
 
@@ -50,7 +59,14 @@ export default function DayTimeline({
         )}
 
         {/* Activities */}
-        <div className="space-y-6">
+        <div
+          ref={setNodeRef}
+          className={`space-y-6 min-h-[100px] transition-colors duration-200 ${
+            isOver
+              ? "bg-amber-50/50 border-2 border-dashed border-amber-300 rounded-lg p-4"
+              : ""
+          }`}
+        >
           {activities.length === 0 ? (
             /* Enhanced Empty State */
             <motion.div
@@ -123,34 +139,39 @@ export default function DayTimeline({
               </motion.div>
             </motion.div>
           ) : (
-            activities.map((activity, index) => (
-              <motion.div
-                key={activity.id}
-                className="relative flex items-start gap-4"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                {/* Enhanced Timeline pin */}
+            <SortableContext
+              items={activities.map((activity) => activity.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {activities.map((activity, index) => (
                 <motion.div
-                  className="relative z-10 w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ duration: 0.2 }}
+                  key={activity.id}
+                  className="relative flex items-start gap-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <span className="text-lg">📍</span>
-                </motion.div>
+                  {/* Enhanced Timeline pin */}
+                  <motion.div
+                    className="relative z-10 w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span className="text-lg">📍</span>
+                  </motion.div>
 
-                {/* Activity Card */}
-                <div className="flex-1">
-                  <ActivityCard
-                    activity={activity}
-                    onEdit={onEditActivity}
-                    onDelete={onDeleteActivity}
-                    onComplete={onCompleteActivity}
-                  />
-                </div>
-              </motion.div>
-            ))
+                  {/* Activity Card */}
+                  <div className="flex-1">
+                    <ActivityCard
+                      activity={activity}
+                      onEdit={onEditActivity}
+                      onDelete={onDeleteActivity}
+                      onComplete={onCompleteActivity}
+                    />
+                  </div>
+                </motion.div>
+              ))}
+            </SortableContext>
           )}
         </div>
 

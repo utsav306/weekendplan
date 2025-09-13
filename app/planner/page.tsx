@@ -11,6 +11,7 @@ import ProgressBar from "@/components/ProgressBar";
 import SuggestionsModal from "@/components/SuggestionsModal";
 import ConfettiCelebration from "@/components/ConfettiCelebration";
 import DaySelectionDialog from "@/components/DaySelectionDialog";
+import DragDropProvider from "@/components/DragDropProvider";
 import { useWeekendPlan } from "@/hooks/useWeekendPlan";
 import { useWeather } from "@/hooks/useWeather";
 import { Activity, ActivitySuggestion, categoryConfig } from "@/lib/types";
@@ -78,6 +79,8 @@ export default function PlannerPage() {
     updateActivity,
     deleteActivity,
     toggleComplete,
+    reorderActivities,
+    moveActivity,
   } = useWeekendPlan();
   const { weather } = useWeather();
 
@@ -134,6 +137,18 @@ export default function PlannerPage() {
 
   const handleSuggestActivities = () => {
     setIsSuggestionsOpen(true);
+  };
+
+  // Wrapper functions for drag-and-drop
+  const handleDragDeleteActivity = (id: string, day: "saturday" | "sunday") => {
+    deleteActivity(id, day);
+  };
+
+  const handleDragCompleteActivity = (
+    id: string,
+    day: "saturday" | "sunday",
+  ) => {
+    toggleComplete(id, day);
   };
 
   return (
@@ -247,69 +262,81 @@ export default function PlannerPage() {
         {/* Content Area */}
         <div className="max-w-6xl mx-auto">
           {/* Desktop: Side by side, Mobile: Stacked */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Saturday */}
-            <motion.div
-              className={`${activeDay !== "saturday" ? "hidden lg:block" : ""}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
-                <div className="relative z-10">
-                  <DayTimeline
-                    day="saturday"
-                    activities={plan.saturday}
-                    onAddActivity={() => {
-                      setActiveDay("saturday");
-                      handleAddActivity();
-                    }}
-                    onSuggestActivities={handleSuggestActivities}
-                    onEditActivity={handleEditActivity}
-                    onDeleteActivity={(id) =>
-                      handleDeleteActivity(id, "saturday")
-                    }
-                    onCompleteActivity={(id) =>
-                      handleCompleteActivity(id, "saturday")
-                    }
-                  />
+          <DragDropProvider
+            saturdayActivities={plan.saturday}
+            sundayActivities={plan.sunday}
+            onReorderActivities={reorderActivities}
+            onMoveActivity={moveActivity}
+            onEditActivity={handleEditActivity}
+            onDeleteActivity={handleDragDeleteActivity}
+            onCompleteActivity={handleDragCompleteActivity}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Saturday */}
+              <motion.div
+                className={`${
+                  activeDay !== "saturday" ? "hidden lg:block" : ""
+                }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                  {/* Subtle inner glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
+                  <div className="relative z-10">
+                    <DayTimeline
+                      day="saturday"
+                      activities={plan.saturday}
+                      onAddActivity={() => {
+                        setActiveDay("saturday");
+                        handleAddActivity();
+                      }}
+                      onSuggestActivities={handleSuggestActivities}
+                      onEditActivity={handleEditActivity}
+                      onDeleteActivity={(id) =>
+                        handleDeleteActivity(id, "saturday")
+                      }
+                      onCompleteActivity={(id) =>
+                        handleCompleteActivity(id, "saturday")
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
 
-            {/* Sunday */}
-            <motion.div
-              className={`${activeDay !== "sunday" ? "hidden lg:block" : ""}`}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
-                <div className="relative z-10">
-                  <DayTimeline
-                    day="sunday"
-                    activities={plan.sunday}
-                    onAddActivity={() => {
-                      setActiveDay("sunday");
-                      handleAddActivity();
-                    }}
-                    onSuggestActivities={handleSuggestActivities}
-                    onEditActivity={handleEditActivity}
-                    onDeleteActivity={(id) =>
-                      handleDeleteActivity(id, "sunday")
-                    }
-                    onCompleteActivity={(id) =>
-                      handleCompleteActivity(id, "sunday")
-                    }
-                  />
+              {/* Sunday */}
+              <motion.div
+                className={`${activeDay !== "sunday" ? "hidden lg:block" : ""}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-amber-200 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                  {/* Subtle inner glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-orange-50/50 rounded-2xl pointer-events-none" />
+                  <div className="relative z-10">
+                    <DayTimeline
+                      day="sunday"
+                      activities={plan.sunday}
+                      onAddActivity={() => {
+                        setActiveDay("sunday");
+                        handleAddActivity();
+                      }}
+                      onSuggestActivities={handleSuggestActivities}
+                      onEditActivity={handleEditActivity}
+                      onDeleteActivity={(id) =>
+                        handleDeleteActivity(id, "sunday")
+                      }
+                      onCompleteActivity={(id) =>
+                        handleCompleteActivity(id, "sunday")
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            </div>
+          </DragDropProvider>
         </div>
 
         {/* Quick Add Activities */}
