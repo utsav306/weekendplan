@@ -1,6 +1,6 @@
-# Wkn.ai - Your AI-Powered Weekend Planner
+# Weekendly - Your AI-Powered Weekend Planner
 
-Wkn.ai is a smart and intuitive web application designed to help you plan the perfect weekend. Leveraging the power of Google's Gemini AI, this app provides personalized activity suggestions based on your mood and the current weather conditions. Say goodbye to decision fatigue and hello to memorable weekends!
+Weekendly is a smart and intuitive web application designed to help you plan the perfect weekend. Leveraging the power of Google's Gemini AI, this app provides personalized activity suggestions based on your mood and the current weather conditions. Say goodbye to decision fatigue and hello to memorable weekends!
 
 ## Live Demo
 
