@@ -1,132 +1,88 @@
-# Weekend Planner App
+# Wkn.ai - Your AI-Powered Weekend Planner
 
-A Next.js application that helps you plan perfect weekends with AI-powered activity suggestions based on weather and your mood.
+Wkn.ai is a smart and intuitive web application designed to help you plan the perfect weekend. Leveraging the power of Google's Gemini AI, this app provides personalized activity suggestions based on your mood and the current weather conditions. Say goodbye to decision fatigue and hello to memorable weekends!
+
+## Live Demo
+
+**[https://wknduts.vercel.app/]**
 
 ## Features
 
-✨ **AI-Powered Suggestions**: Get personalized activity recommendations from Google's Gemini AI
-🌤️ **Weather Integration**: Activity suggestions adapt to current weather conditions
-🎯 **Mood-Based Planning**: Choose from lazy, adventurous, social, or chill moods
-📍 **Location Aware**: Uses your location for more accurate suggestions
-⚡ **Smart Fallbacks**: Automatically falls back to curated suggestions if AI is unavailable
-🎨 **Beautiful UI**: Modern, responsive design with smooth animations
+### Core Features
 
-## Setup Instructions
+* **AI-Powered Suggestions**: Get personalized activity recommendations from Google's Gemini AI, tailored to your mood, the weather, your location, and the time of day.
+* **Dynamic Weekend Timeline**: Plan your Saturday and Sunday with a clear and visually appealing timeline interface.
+* **Add, Edit, and Delete Activities**: Easily manage your weekend schedule with intuitive controls for adding, editing, and removing activities.
+* **Drag-and-Drop Interface**: Rearrange your plans effortlessly by dragging and dropping activities within a day or between Saturday and Sunday.
+* **Weather Integration**: The app fetches real-time weather data to provide relevant and timely suggestions.
+* **Mood-Based Planning**: Choose from a variety of moods like "lazy," "adventurous," "social," or "chill" to get curated activity suggestions.
 
-### 1. Clone and Install Dependencies
+### Advanced Features
 
-```bash
-git clone <your-repo-url>
-cd project
-npm install
-```
-
-### 2. Environment Variables
-
-Copy the example environment file and add your API keys:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local` and add your API keys:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-OPENWEATHER_API_KEY=your_openweather_api_key_here
-```
-
-### 3. Get API Keys
-
-#### Gemini AI API Key
-
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Create API Key"
-4. Copy the generated key to your `.env.local` file
-
-#### OpenWeather API Key
-
-1. Visit [OpenWeatherMap](https://openweathermap.org/api)
-2. Sign up for a free account
-3. Go to your API keys section
-4. Copy the default API key to your `.env.local` file
-
-### 4. Run the Application
-
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000) to see your app running!
-
-## How It Works
-
-1. **Weather Detection**: The app detects your location and fetches current weather data
-2. **Mood Selection**: Choose what type of weekend experience you want
-3. **AI Generation**: Gemini AI creates personalized suggestions based on your mood, weather, location, and time
-4. **Smart Fallbacks**: If AI is unavailable, the app shows curated suggestions instead
-5. **Activity Planning**: Add suggested activities to your weekend schedule
-
-## Features Overview
-
-### AI vs Curated Mode
-
-- **AI Mode**: Real-time suggestions from Gemini AI based on multiple factors
-- **Curated Mode**: Hand-picked suggestions organized by mood and weather
-- Toggle between modes anytime with the switch in the suggestions modal
-
-### Error Handling
-
-- Graceful fallbacks when APIs are unavailable
-- Clear error messages and alternative options
-- Offline-capable with cached suggestions
-
-### Privacy
-
-- Location data is only used for weather and suggestions
-- No personal data is stored or transmitted
-- All API calls are made securely from your browser
+* **Progress Tracking**: A beautiful progress bar visualizes your weekend's completion, motivating you to make the most of your time off.
+* **Confetti Celebration**: Get a burst of confetti when you've completed all your planned activities for the weekend.
+* **Smart Fallbacks**: If the AI is unavailable, the app seamlessly switches to a curated list of suggestions, ensuring you're never out of ideas.
+* **Local Storage Persistence**: Your weekend plans are automatically saved to your browser's local storage, so you can pick up right where you left off.
+* **Visually Rich and Responsive UI**: Enjoy a modern, responsive design with smooth animations and a delightful user experience, built with Tailwind CSS and Framer Motion.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 with App Router
-- **Styling**: Tailwind CSS
-- **AI**: Google Gemini AI
-- **Weather**: OpenWeatherMap API
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **State Management**: React Hooks
+* **Framework**: [Next.js](https://nextjs.org/) 14 (with App Router)
+* **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+* **AI**: [Google Gemini AI](https://ai.google.dev/)
+* **Weather**: [OpenWeatherMap API](https://openweathermap.org/api)
+* **Animations**: [Framer Motion](https://www.framer.com/motion/)
+* **Drag and Drop**: [`@dnd-kit`](https://dndkit.com/)
+* **Icons**: [Lucide React](https://lucide.dev/)
+* **State Management**: React Hooks (`useState`, `useEffect`, `useReducer`)
+* **Deployment**: Vercel
 
-## Troubleshooting
+## Getting Started
 
-### AI Suggestions Not Working
+### Prerequisites
 
-1. Check that `GEMINI_API_KEY` is set in `.env.local`
-2. Verify your API key is valid and has quota remaining
-3. Check the browser console for error messages
-4. The app will automatically fall back to curated suggestions
+* Node.js (v16.14.0 or later)
+* npm or yarn
 
-### Weather Not Loading
+### Installation
 
-1. Allow location access when prompted
-2. Check that `OPENWEATHER_API_KEY` is set in `.env.local`
-3. Verify your OpenWeather API key is active
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/utsav306/weekendplan.git]
+    cd weekendplan
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Set up environment variables:**
 
-### General Issues
+    Create a `.env.local` file in the root of your project and add your API keys. You can use the `.env.local.example` file as a template.
 
-1. Restart the development server: `npm run dev`
-2. Clear browser cache and reload
-3. Check the console for any JavaScript errors
+    ```env
+    GEMINI_API_KEY=your_gemini_api_key_here
+    OPENWEATHER_API_KEY=your_openweather_api_key_here
+    ```
 
-## Contributing
+    * **Gemini AI API Key**: Get your key from [Google AI Studio](https://makersuite.google.com/app/apikey).
+    * **OpenWeather API Key**: Get your key from [OpenWeatherMap](https://openweathermap.org/api).
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## License
 
-This project is open source and available under the [MIT License](LICENSE).
+## Key Components and Logic
+
+* **`useWeekendPlan.ts`**: This custom hook is the heart of the application's state management. It uses a reducer to handle all actions related to the weekend plan, such as adding, updating, deleting, and reordering activities. It also persists the plan to `localStorage`.
+* **`useActivitySuggestions.ts`**: This hook encapsulates the logic for fetching activity suggestions. It provides a clean interface for getting suggestions from either the Gemini AI or the fallback curated list.
+* **`DragDropProvider.tsx`**: This component wraps the main planner view and provides the context and logic for the drag-and-drop functionality using `@dnd-kit`.
+* **`DayTimeline.tsx` and `ActivityCard.tsx`**: These components work together to create the visual representation of the weekend plan. `DayTimeline` manages the list of activities for a given day, and `ActivityCard` renders each individual activity with its details and actions.
+
+## API Endpoints
+
+* **`/api/weather`**: This endpoint fetches weather data from the OpenWeatherMap API based on either a city name or latitude/longitude coordinates.
+* **`/api/gemini`**: This endpoint communicates with the Google Gemini AI to generate personalized activity suggestions. It takes the user's mood, weather, location, and time of day as input and returns a structured list of suggestions.
+
