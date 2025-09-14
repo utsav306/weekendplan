@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Weekendly - Plan Your Perfect Weekend',
+  title: 'WKN.ai - Plan Your Perfect Weekend',
   description: 'Plan your perfect weekend journey with beautiful, intuitive planning tools.',
 };
 
