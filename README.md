@@ -35,7 +35,7 @@ Wkn.ai is a smart and intuitive web application designed to help you plan the pe
 * **Drag and Drop**: [`@dnd-kit`](https://dndkit.com/)
 * **Icons**: [Lucide React](https://lucide.dev/)
 * **State Management**: React Hooks (`useState`, `useEffect`, `useReducer`)
-* **Deployment**: Vercel, Netlify, or similar
+* **Deployment**: Vercel
 
 ## Getting Started
 
