@@ -99,7 +99,7 @@ export default function Home() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            Wkn.ai
+            Weekendly
           </motion.h1>
 
           <motion.p
