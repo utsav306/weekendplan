@@ -364,9 +364,6 @@ export default function PlannerPage() {
                 ⚡
               </motion.span>
               Quick Add Activities
-              <span className="ml-auto text-xs sm:text-sm font-normal text-amber-600 whitespace-nowrap">
-                Click to add
-              </span>
             </motion.h3>
 
             <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 relative z-10">
