@@ -28,7 +28,7 @@ export function useWeather() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           };
-          console.log("Got user location:", coords);
+         
           setLocation(coords);
           resolve(coords);
         },
@@ -74,10 +74,10 @@ export function useWeather() {
           locationError,
         );
         // Fallback to London if geolocation fails
-        console.log("Fetching weather for London as fallback");
+     
         const response = await fetch("/api/weather?city=London");
 
-        console.log("Fallback weather API response status:", response.status);
+     
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -87,7 +87,7 @@ export function useWeather() {
           );
         }
         const data = await response.json();
-        console.log("Fallback weather API data:", data);
+    
         setWeather({
           temperature: Math.round(data.main.temp),
           condition: data.weather[0].main.toLowerCase(),
@@ -99,12 +99,12 @@ export function useWeather() {
       }
 
       // Fetch weather using coordinates
-      console.log("Fetching weather for coordinates:", coords);
+  
       const response = await fetch(
         `/api/weather?lat=${coords.latitude}&lon=${coords.longitude}`,
       );
 
-      console.log("Weather API response status:", response.status);
+  
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -115,7 +115,6 @@ export function useWeather() {
       }
 
       const data = await response.json();
-      console.log("Weather API data:", data);
 
       setWeather({
         temperature: Math.round(data.main.temp),

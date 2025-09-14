@@ -333,10 +333,16 @@ export default function SuggestionsModal({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {suggestions.map((suggestion, index) => {
                       const categoryStyle = categoryConfig[suggestion.category];
+                      // Fallback if categoryStyle is undefined
+                      const fallbackStyle = {
+                        color: "border-gray-200",
+                        icon: "❓",
+                      };
+                      const safeCategoryStyle = categoryStyle || fallbackStyle;
                       return (
                         <motion.div
                           key={suggestion.id}
-                          className={`p-4 rounded-xl border-2 ${categoryStyle.color}`}
+                          className={`p-4 rounded-xl border-2 ${safeCategoryStyle.color}`}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -344,7 +350,7 @@ export default function SuggestionsModal({
                           <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-2">
                               <span className="text-2xl">
-                                {categoryStyle.icon}
+                                {safeCategoryStyle.icon}
                               </span>
                               <div>
                                 <h4 className="font-bold">

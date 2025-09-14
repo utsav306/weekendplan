@@ -18,12 +18,7 @@ export async function POST(request) {
     const body = await request.json();
     const { mood, weather, location, timeOfDay } = body;
 
-    console.log("Gemini API called with:", {
-      mood,
-      weather: weather?.condition,
-      location,
-      timeOfDay,
-    });
+    
 
     // Validate required parameters
     if (!mood) {
@@ -40,14 +35,14 @@ export async function POST(request) {
     // Build comprehensive prompt
     const prompt = buildActivityPrompt(mood, weather, location, timeOfDay);
 
-    console.log("Generated prompt:", prompt);
+    
 
     // Generate AI suggestions
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    console.log("Gemini response:", text);
+    
 
     // Parse the AI response into structured activity suggestions
     const suggestions = parseAIResponse(text);
